@@ -127,3 +127,76 @@ Watch what happens to `robot_2` in RViz — it moves even though you only change
 
 ### Answer questions in Canvas - Transform System (tf2) in ROS2
 
+
+## Part 2 — Dynamic Transforms with robot_state_publisher
+ 
+**Stop all terminals from Part 1 before continuing.**
+ 
+For a robot with moving joints, you describe the robot in a **URDF** file and let `robot_state_publisher` handle all the TF broadcasting automatically.
+ 
+Data flow:
+ 
+```
+URDF file → robot_state_publisher → /tf  /tf_static  /robot_description
+                                              ↑
+joint_state_publisher_gui → /joint_states ───┘
+```
+ 
+### Step 1: Install required packages
+ 
+```bash
+sudo apt install ros-jazzy-joint-state-publisher-gui ros-jazzy-xacro
+```
+ 
+### Step 2: Get the example URDF
+ 
+Download the example URDF from Josh Newans' gist:
+ 
+```bash
+wget -O /tmp/simple_arm.urdf.xacro \
+  https://gist.githubusercontent.com/joshnewans/69cb8a049fb4606b0a6bdecd6933164e/raw/simple_arm.urdf.xacro
+```
+ 
+### Step 3: Launch robot_state_publisher
+ 
+```bash
+ros2 run robot_state_publisher robot_state_publisher \
+  --ros-args -p robot_description:="$(xacro /tmp/simple_arm.urdf.xacro)"
+```
+ 
+> `xacro` preprocesses the file; `$(...)` passes the full URDF text (not a path) as the parameter.
+ 
+### Step 4: Launch joint_state_publisher_gui
+ 
+Open a new terminal:
+ 
+```bash
+ros2 run joint_state_publisher_gui joint_state_publisher_gui
+```
+ 
+A slider panel will appear for each moveable joint.
+ 
+### Step 5: Open RViz
+ 
+Open a new terminal:
+ 
+```bash
+rviz2
+```
+ 
+In RViz:
+1. Fixed Frame → `base_link`
+2. Add → **TF** → OK
+3. Add → **RobotModel** → OK → set **Description Topic** to `/robot_description`
+ 
+Move the sliders and watch the frames and model update in real time.
+ 
+### Step 6: Inspect the system
+ 
+```bash
+ros2 node list
+ros2 topic list
+ros2 topic echo /joint_states --once
+ros2 run tf2_tools view_frames && xdg-open frames.pdf
+```
+### Answer questions in Canvas - Transform System (tf2) in ROS2
