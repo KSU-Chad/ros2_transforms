@@ -154,7 +154,7 @@ Download the example URDF from Josh Newans' gist:
  
 ```bash
 wget -O /tmp/simple_arm.urdf.xacro \
-  https://gist.githubusercontent.com/joshnewans/69cb8a049fb4606b0a6bdecd6933164e/raw/simple_arm.urdf.xacro
+  https://gist.githubusercontent.com/joshnewans/69cb8a049fb4606b0a6bdecd6933164e/raw/example_robot.urdf.xacro
 ```
  
 ### Step 3: Launch robot_state_publisher
